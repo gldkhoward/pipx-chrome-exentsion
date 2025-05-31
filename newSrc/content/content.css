@@ -1,0 +1,231 @@
+/* PipX Content Styles - Page-level styling for notifications and overlays */
+
+/* Notification styles are handled inline in the content script for better isolation */
+
+/* Ensure PipX elements have proper z-index */
+[id^="pipx-"] {
+  z-index: 2147483647 !important; /* Maximum z-index */
+}
+
+/* Hide any potential conflicts with page styles */
+.pipx-notification {
+  all: initial !important;
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  background: rgba(0,0,0,0.9) !important;
+  color: white !important;
+  padding: 12px 20px !important;
+  border-radius: 8px !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 14px !important;
+  z-index: 10000 !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s ease !important;
+  border-left: 4px solid #A3E635 !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+/* Native PipX button styles */
+.pipx-native-btn {
+  background: transparent !important;
+  border: none !important;
+  color: white !important;
+  cursor: pointer !important;
+  padding: 8px !important;
+  margin: 0 4px !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 36px !important;
+  height: 36px !important;
+  opacity: 0.8 !important;
+  position: relative !important;
+  z-index: 1000 !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+  outline: none !important;
+  text-decoration: none !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: 1 !important;
+  overflow: visible !important;
+  text-transform: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  top: auto !important; /* Allow site-specific overrides */
+  bottom: auto !important; /* Allow site-specific overrides */
+}
+
+.pipx-native-btn:hover {
+  opacity: 1 !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: scale(1.05) !important;
+}
+
+.pipx-native-btn:active {
+  transform: scale(0.95) !important;
+}
+
+.pipx-native-btn:focus {
+  outline: 2px solid #A3E635 !important;
+  outline-offset: 2px !important;
+}
+
+/* PipX button SVG icon styles */
+.pipx-native-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  pointer-events: none !important;
+  display: block !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+  transform: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  mask: none !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Ensure SVG paths inherit color */
+.pipx-native-btn svg path {
+  fill: inherit !important;
+  stroke: inherit !important;
+}
+
+/* Site-specific adjustments */
+
+/* YouTube specific styles */
+.ytp-chrome-controls .pipx-native-btn {
+  /* Match YouTube's .ytp-button exactly */
+  width: 36px !important; /* Narrower than standard YouTube buttons */
+  height: 48px !important;
+  padding: 8px !important; /* Reduced padding for tighter fit */
+  margin: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  color: white !important;
+  cursor: pointer !important;
+  display: inline-flex !important; /* Changed to inline-flex for better alignment */
+  align-items: center !important; /* Center content vertically */
+  justify-content: center !important; /* Center content horizontally */
+  vertical-align: top !important; /* Changed back to middle for inline alignment */
+  box-sizing: border-box !important;
+  position: relative !important;
+  outline: none !important;
+  font-size: 12px !important;
+  line-height: 1 !important; /* Reset line-height since we're using flexbox */
+  text-align: center !important;
+  /* Remove any transforms that might affect positioning */
+  transform: scale(1.1) !important;
+  top: 6px !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  /* Ensure proper alignment with other buttons */
+  flex-shrink: 0 !important; /* Prevent shrinking in flex container */
+}
+
+.ytp-chrome-controls .pipx-native-btn:hover {
+  /* Match YouTube hover behavior */
+  opacity: 1 !important;
+  background: transparent !important;
+  transform: none !important; /* No scaling on YouTube */
+}
+
+.ytp-chrome-controls .pipx-native-btn svg {
+  width: 28px !important; /* Larger icon */
+  height: 28px !important; /* Larger icon */
+  display: block !important;
+  margin: 0 !important; /* Remove auto margin since parent is flex */
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  pointer-events: none !important;
+  /* Remove positioning since flexbox parent will center it */
+  position: static !important;
+  top: auto !important;
+  transform: none !important;
+}
+
+/* Netflix specific styles */
+.watch-video .pipx-native-btn {
+  background: rgba(0, 0, 0, 0.5) !important;
+  border-radius: 50% !important;
+}
+
+/* Generic video player adjustments */
+.video-controls .pipx-native-btn,
+.player-controls .pipx-native-btn,
+.controls .pipx-native-btn {
+  background: rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* Glow animation for introduction */
+@keyframes pipx-glow {
+  0% {
+    box-shadow: 0 0 5px #A3E635;
+  }
+  50% {
+    box-shadow: 0 0 20px #A3E635, 0 0 30px #A3E635;
+  }
+  100% {
+    box-shadow: 0 0 5px #A3E635;
+  }
+}
+
+.pipx-native-btn.pipx-intro-glow {
+  animation: pipx-glow 2s ease-in-out !important;
+}
+
+/* Ensure button doesn't break site layouts */
+.pipx-native-btn {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  hyphens: none !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .pipx-native-btn {
+    border: 1px solid currentColor !important;
+  }
+  
+  .pipx-native-btn:hover {
+    background: currentColor !important;
+    color: black !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .pipx-native-btn {
+    transition: none !important;
+  }
+  
+  .pipx-native-btn:hover {
+    transform: none !important;
+  }
+  
+  .pipx-native-btn.pipx-intro-glow {
+    animation: none !important;
+  }
+} 

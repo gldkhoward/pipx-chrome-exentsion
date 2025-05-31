@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PipX Extension Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .test-btn { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        .test-btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>PipX Extension Test Page</h1>
+    <p>This page tests the PipX Chrome extension after fixing import errors.</p>
+    
+    <video controls width="640" height="360">
+        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <div style="margin-top: 20px;">
+        <button class="test-btn" onclick="testExtension()">🔍 Test Extension Status</button>
+        <button class="test-btn" onclick="testConfig()">⚙️ Test Configuration</button>
+        <button class="test-btn" onclick="testPipAPI()">🖼️ Test PiP API</button>
+        <button class="test-btn" onclick="clearResults()">🗑️ Clear Results</button>
+    </div>
+    
+    <div id="results"></div>
+    
+    <script>
+        function addResult(message, type = 'success') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        function testExtension() {
+            clearResults();
+            addResult('<h3>🔍 Extension Status Test</h3>');
+            
+            // Check if content script is loaded
+            if (window.pipxContentScriptLoaded) {
+                addResult('✅ PipX content script loaded successfully!', 'success');
+            } else {
+                addResult('❌ PipX content script not loaded. Check console for errors.', 'error');
+            }
+            
+            // Check if config is available
+            if (window.PipXConfig) {
+                addResult('✅ PipX configuration system loaded successfully!', 'success');
+                
+                // Test individual components
+                const { ConfigManager, SiteDetector, IconManager, DEFAULT_CONFIG } = window.PipXConfig;
+                
+                if (ConfigManager) {
+                    addResult('✅ ConfigManager class available', 'success');
+                } else {
+                    addResult('❌ ConfigManager class missing', 'error');
+                }
+                
+                if (SiteDetector) {
+                    addResult('✅ SiteDetector class available', 'success');
+                } else {
+                    addResult('❌ SiteDetector class missing', 'error');
+                }
+                
+                if (IconManager) {
+                    addResult('✅ IconManager class available', 'success');
+                } else {
+                    addResult('❌ IconManager class missing', 'error');
+                }
+                
+                if (DEFAULT_CONFIG) {
+                    addResult('✅ DEFAULT_CONFIG object available', 'success');
+                } else {
+                    addResult('❌ DEFAULT_CONFIG object missing', 'error');
+                }
+                
+            } else {
+                addResult('❌ PipX configuration system not available.', 'error');
+            }
+        }
+        
+        async function testConfig() {
+            addResult('<h3>⚙️ Configuration Test</h3>');
+            
+            if (!window.PipXConfig) {
+                addResult('❌ Configuration system not loaded', 'error');
+                return;
+            }
+            
+            const { ConfigManager, SiteDetector, DEFAULT_CONFIG } = window.PipXConfig;
+            
+            try {
+                // Test site detection
+                const currentSite = SiteDetector.getCurrentSite();
+                addResult(`🌐 Current site detected as: <strong>${currentSite}</strong>`, 'success');
+                
+                const siteConfig = SiteDetector.getSiteConfig();
+                addResult(`📋 Site config: <strong>${siteConfig.name}</strong> with features: ${siteConfig.features.join(', ') || 'none'}`, 'success');
+                
+                // Test config loading
+                const config = await ConfigManager.load();
+                addResult('✅ Configuration loaded successfully', 'success');
+                addResult(`🎨 Theme: Primary color is <span style="color: ${config.theme.primaryColor}; font-weight: bold;">${config.theme.primaryColor}</span>`, 'success');
+                
+            } catch (error) {
+                addResult(`❌ Configuration test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        function testPipAPI() {
+            addResult('<h3>🖼️ Picture-in-Picture API Test</h3>');
+            
+            // Test Document PiP API
+            if ('documentPictureInPicture' in window) {
+                addResult('✅ Document Picture-in-Picture API supported', 'success');
+            } else {
+                addResult('⚠️ Document Picture-in-Picture API not supported (need Chrome 116+)', 'warning');
+            }
+            
+            // Test Standard PiP API
+            if ('requestPictureInPicture' in HTMLVideoElement.prototype) {
+                addResult('✅ Standard Picture-in-Picture API supported', 'success');
+            } else {
+                addResult('❌ Standard Picture-in-Picture API not supported', 'error');
+            }
+            
+            // Test video detection
+            const videos = document.querySelectorAll('video');
+            addResult(`📹 Found ${videos.length} video element(s) on page`, videos.length > 0 ? 'success' : 'warning');
+            
+            if (videos.length > 0) {
+                const video = videos[0];
+                addResult(`📊 Video status: ${video.paused ? 'Paused' : 'Playing'}, Ready state: ${video.readyState}`, 'success');
+            }
+        }
+        
+        // Auto-test on page load
+        setTimeout(() => {
+            testExtension();
+        }, 1000);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,78 @@
+{
+  "manifest_version": 3,
+  "name": "PipX - Enhanced Picture-in-Picture",
+  "version": "2.0.0",
+  "description": "Enhanced Picture-in-Picture with custom controls, site-specific features, and user customization",
+  
+  "permissions": [
+    "scripting",
+    "storage",
+    "system.display",
+    "activeTab"
+  ],
+  
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "PipX - Enhanced Picture-in-Picture",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "64": "icons/icon64.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["utils/config.js", "content/content.js"],
+      "css": ["content/content.css"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "64": "icons/icon64.png",
+    "128": "icons/icon128.png"
+  },
+  
+  "options_page": "options/options.html",
+  
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+P"
+      }
+    },
+    "toggle_pip": {
+      "suggested_key": {
+        "default": "Alt+Shift+P"
+      },
+      "description": "Toggle Picture-in-Picture"
+    }
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/icons/*.svg",
+        "utils/config.js",
+        "content/pip-window.html",
+        "content/pip-window.css",
+        "content/pip-window.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+} 

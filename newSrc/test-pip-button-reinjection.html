@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PipX Button Re-injection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f0f0f;
+            color: white;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Simulate YouTube interface */
+        .video-container {
+            background: #000;
+            width: 100%;
+            height: 400px;
+            position: relative;
+            margin: 20px 0;
+        }
+        
+        video {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .ytp-chrome-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .ytp-right-controls {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ytp-button {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+        
+        .ytp-button:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .test-controls {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .test-btn {
+            background: #A3E635;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .test-btn:hover {
+            background: #8FD14F;
+        }
+        
+        .log {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 20px 0;
+        }
+        
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 0;
+        }
+        
+        .info { color: #6eb7ff; }
+        .success { color: #A3E635; }
+        .warning { color: #f59e0b; }
+        .error { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔵 PipX Button Re-injection Test</h1>
+        
+        <div class="test-controls">
+            <button class="test-btn" onclick="simulateYouTubeLoad()">🎬 Simulate YouTube Load</button>
+            <button class="test-btn" onclick="openPiP()">📱 Open PiP</button>
+            <button class="test-btn" onclick="closePiP()">❌ Close PiP</button>
+            <button class="test-btn" onclick="removeButton()">🗑️ Remove Button</button>
+            <button class="test-btn" onclick="clearLog()">🧹 Clear Log</button>
+        </div>
+        
+        <div class="video-container">
+            <video controls>
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            
+            <div class="ytp-chrome-controls">
+                <div class="ytp-right-controls">
+                    <button class="ytp-button ytp-settings-button" title="Settings">
+                        ⚙️
+                    </button>
+                    <button class="ytp-button ytp-miniplayer-button" title="Miniplayer">
+                        📺
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="log" id="testLog">
+            <div class="log-entry info">🔵 Test page loaded. Use the buttons above to test PiP button re-injection.</div>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <h3>📋 Test Steps:</h3>
+            <ol>
+                <li><strong>Simulate YouTube Load</strong> - This will initialize the PipX extension and inject the PiP button</li>
+                <li><strong>Open PiP</strong> - This simulates opening the PiP window</li>
+                <li><strong>Close PiP</strong> - This simulates closing the PiP window (should trigger button re-injection)</li>
+                <li><strong>Remove Button</strong> - This manually removes the button to test periodic re-injection</li>
+            </ol>
+            
+            <p><strong>Expected Behavior:</strong> After closing PiP, the button should automatically reappear in the YouTube controls.</p>
+        </div>
+    </div>
+
+    <script>
+        // Mock chrome APIs for testing
+        window.chrome = {
+            runtime: {
+                onMessage: {
+                    addListener: () => {}
+                },
+                getURL: (path) => path
+            },
+            tabs: {
+                sendMessage: () => Promise.resolve({success: true})
+            }
+        };
+        
+        // Mock window.PipXConfig
+        window.PipXConfig = {
+            ConfigManager: {
+                load: () => Promise.resolve({
+                    theme: { primaryColor: '#A3E635' },
+                    window: { defaultWidth: 400, defaultHeight: 300 },
+                    controls: { autoHide: true, autoHideDelay: 3000 }
+                })
+            },
+            SiteDetector: {
+                getCurrentSite: () => 'youtube.com',
+                getSiteConfig: () => ({
+                    name: 'YouTube',
+                    features: ['next', 'previous'],
+                    selectors: {
+                        video: 'video',
+                        nextButton: '.ytp-next-button',
+                        prevButton: '.ytp-prev-button'
+                    },
+                    customControls: true
+                })
+            },
+            IconManager: {
+                loadIcon: (name) => Promise.resolve(`
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <rect x="8" y="8" width="8" height="6" rx="1" ry="1"/>
+                    </svg>
+                `)
+            }
+        };
+        
+        let pipxController = null;
+        let isInitialized = false;
+        
+        function log(message, type = 'info') {
+            const logElement = document.getElementById('testLog');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+            logElement.appendChild(entry);
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        function simulateYouTubeLoad() {
+            if (isInitialized) {
+                log('⚠️ Already initialized', 'warning');
+                return;
+            }
+            
+            log('🔵 Simulating YouTube page load...', 'info');
+            
+            // Set hostname for site detection
+            Object.defineProperty(window.location, 'hostname', {
+                writable: true,
+                value: 'www.youtube.com'
+            });
+            
+            // Load the content script
+            const script = document.createElement('script');
+            script.src = 'content/content.js';
+            script.onload = () => {
+                log('✅ PipX content script loaded', 'success');
+                pipxController = window.pipxController;
+                isInitialized = true;
+            };
+            script.onerror = () => {
+                log('❌ Failed to load content script', 'error');
+            };
+            
+            document.head.appendChild(script);
+        }
+        
+        function openPiP() {
+            if (!isInitialized) {
+                log('⚠️ Initialize first by clicking "Simulate YouTube Load"', 'warning');
+                return;
+            }
+            
+            log('🔵 Opening PiP...', 'info');
+            
+            // Mock documentPictureInPicture API
+            window.documentPictureInPicture = {
+                requestWindow: (config) => {
+                    const mockWindow = {
+                        document: document.implementation.createHTMLDocument('PiP'),
+                        addEventListener: () => {},
+                        closed: false,
+                        close: function() {
+                            this.closed = true;
+                            // Trigger pagehide event
+                            setTimeout(() => {
+                                const event = new Event('pagehide');
+                                this.document.dispatchEvent(event);
+                            }, 100);
+                        }
+                    };
+                    
+                    mockWindow.document.head = document.createElement('head');
+                    mockWindow.document.body = document.createElement('body');
+                    
+                    log('✅ Mock PiP window created', 'success');
+                    return Promise.resolve(mockWindow);
+                }
+            };
+            
+            if (pipxController) {
+                pipxController.togglePiP(true);
+            }
+        }
+        
+        function closePiP() {
+            if (!isInitialized) {
+                log('⚠️ Initialize first', 'warning');
+                return;
+            }
+            
+            log('🔵 Closing PiP...', 'info');
+            
+            if (pipxController && pipxController.pipWindow) {
+                pipxController.pipWindow.close();
+                log('✅ PiP window closed, waiting for button re-injection...', 'success');
+            } else {
+                log('⚠️ No PiP window to close', 'warning');
+            }
+        }
+        
+        function removeButton() {
+            const button = document.querySelector('.pipx-native-btn');
+            if (button) {
+                button.remove();
+                log('🗑️ Manually removed PiP button', 'warning');
+                log('⏳ Waiting for automatic re-injection...', 'info');
+            } else {
+                log('⚠️ No PiP button found to remove', 'warning');
+            }
+        }
+        
+        function clearLog() {
+            document.getElementById('testLog').innerHTML = '';
+        }
+        
+        // Monitor for button injection
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === 1 && node.classList && node.classList.contains('pipx-native-btn')) {
+                        log('✅ PiP button detected in DOM!', 'success');
+                    }
+                });
+                
+                mutation.removedNodes.forEach((node) => {
+                    if (node.nodeType === 1 && node.classList && node.classList.contains('pipx-native-btn')) {
+                        log('❌ PiP button removed from DOM', 'error');
+                    }
+                });
+            });
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    </script>
+</body>
+</html> 

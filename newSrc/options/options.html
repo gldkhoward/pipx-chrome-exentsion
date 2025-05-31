@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PipX Settings - Enhanced Picture-in-Picture</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="options-container">
+        <!-- Header -->
+        <header class="options-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="../icons/icon64.png" alt="PipX" class="logo">
+                    <div class="title-section">
+                        <h1>PipX Settings</h1>
+                        <p class="subtitle">Enhanced Picture-in-Picture Configuration</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn secondary" id="resetBtn">
+                        <img src="../assets/icons/rocket.svg" alt="Reset" class="icon">
+                        Reset to Defaults
+                    </button>
+                    <button class="btn primary" id="saveBtn">
+                        <img src="../assets/icons/cog.svg" alt="Save" class="icon">
+                        Save Settings
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="options-nav">
+            <button class="nav-btn active" data-section="theme">
+                <img src="../assets/icons/pip.svg" alt="Theme" class="icon">
+                <span>Theme & Appearance</span>
+            </button>
+            <button class="nav-btn" data-section="window">
+                <img src="../assets/icons/monitorCog.svg" alt="Window" class="icon">
+                <span>Window Settings</span>
+            </button>
+            <button class="nav-btn" data-section="controls">
+                <img src="../assets/icons/play.svg" alt="Controls" class="icon">
+                <span>Controls</span>
+            </button>
+            <button class="nav-btn" data-section="behavior">
+                <img src="../assets/icons/speed.svg" alt="Behavior" class="icon">
+                <span>Behavior</span>
+            </button>
+            <button class="nav-btn" data-section="sites">
+                <img src="../assets/icons/rocket.svg" alt="Sites" class="icon">
+                <span>Site-Specific</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="options-main">
+            <!-- Theme & Appearance Section -->
+            <section class="options-section active" id="theme-section">
+                <div class="section-header">
+                    <h2>Theme & Appearance</h2>
+                    <p>Customize the look and feel of your PiP controls</p>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>Colors</h3>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Primary Color</span>
+                                <span class="label-desc">Highlight color for buttons and progress bars</span>
+                            </label>
+                            <div class="color-input-container">
+                                <input type="color" id="primaryColor" class="color-input" value="#A3E635">
+                                <input type="text" id="primaryColorText" class="color-text" value="#A3E635">
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Background Color</span>
+                                <span class="label-desc">Background color for PiP window</span>
+                            </label>
+                            <div class="color-input-container">
+                                <input type="color" id="backgroundColor" class="color-input" value="#000000">
+                                <input type="text" id="backgroundColorText" class="color-text" value="#000000">
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Text Color</span>
+                                <span class="label-desc">Color for text and icons</span>
+                            </label>
+                            <div class="color-input-container">
+                                <input type="color" id="textColor" class="color-input" value="#FFFFFF">
+                                <input type="text" id="textColorText" class="color-text" value="#FFFFFF">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Animation & Effects</h3>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Animation Duration</span>
+                                <span class="label-desc">Speed of hover and transition effects</span>
+                            </label>
+                            <div class="range-input-container">
+                                <input type="range" id="animationDuration" min="100" max="1000" step="50" value="300" class="range-input">
+                                <span class="range-value">300ms</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Control Opacity</span>
+                                <span class="label-desc">Transparency of control overlay</span>
+                            </label>
+                            <div class="range-input-container">
+                                <input type="range" id="controlOpacity" min="0.5" max="1" step="0.1" value="0.9" class="range-input">
+                                <span class="range-value">90%</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Border Radius</span>
+                                <span class="label-desc">Roundness of buttons and controls</span>
+                            </label>
+                            <div class="range-input-container">
+                                <input type="range" id="borderRadius" min="0" max="20" step="2" value="8" class="range-input">
+                                <span class="range-value">8px</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme Preview -->
+                <div class="theme-preview">
+                    <h3>Preview</h3>
+                    <div class="preview-container" id="themePreview">
+                        <div class="preview-controls">
+                            <button class="preview-btn">
+                                <img src="../assets/icons/rewind.svg" alt="Rewind" class="icon">
+                            </button>
+                            <button class="preview-btn primary">
+                                <img src="../assets/icons/play.svg" alt="Play" class="icon">
+                            </button>
+                            <button class="preview-btn">
+                                <img src="../assets/icons/forward.svg" alt="Forward" class="icon">
+                            </button>
+                            <div class="preview-progress">
+                                <div class="preview-progress-bar"></div>
+                            </div>
+                            <span class="preview-time">1:23 / 4:56</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Window Settings Section -->
+            <section class="options-section" id="window-section">
+                <div class="section-header">
+                    <h2>Window Settings</h2>
+                    <p>Configure PiP window size and behavior</p>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>Default Size</h3>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Default Width</span>
+                                <span class="label-desc">Initial width of PiP window</span>
+                            </label>
+                            <div class="number-input-container">
+                                <input type="number" id="defaultWidth" min="200" max="1200" value="400" class="number-input">
+                                <span class="input-unit">px</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Default Height</span>
+                                <span class="label-desc">Initial height of PiP window</span>
+                            </label>
+                            <div class="number-input-container">
+                                <input type="number" id="defaultHeight" min="150" max="800" value="300" class="number-input">
+                                <span class="input-unit">px</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Size Limits</h3>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Minimum Width</span>
+                                <span class="label-desc">Smallest allowed width</span>
+                            </label>
+                            <div class="number-input-container">
+                                <input type="number" id="minWidth" min="100" max="500" value="200" class="number-input">
+                                <span class="input-unit">px</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Maximum Width</span>
+                                <span class="label-desc">Largest allowed width</span>
+                            </label>
+                            <div class="number-input-container">
+                                <input type="number" id="maxWidth" min="400" max="2000" value="800" class="number-input">
+                                <span class="input-unit">px</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Memory</h3>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Remember Window Size</span>
+                                <span class="label-desc">Save and restore window dimensions</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="rememberSize" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Remember Window Position</span>
+                                <span class="label-desc">Save and restore window location</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="rememberPosition" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controls Section -->
+            <section class="options-section" id="controls-section">
+                <div class="section-header">
+                    <h2>Controls</h2>
+                    <p>Customize which controls are shown and how they behave</p>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>Visibility</h3>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Auto-hide Controls</span>
+                                <span class="label-desc">Hide controls when not hovering</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="autoHide" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Auto-hide Delay</span>
+                                <span class="label-desc">Time before controls hide</span>
+                            </label>
+                            <div class="range-input-container">
+                                <input type="range" id="autoHideDelay" min="1000" max="10000" step="500" value="3000" class="range-input">
+                                <span class="range-value">3.0s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Control Elements</h3>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Show Progress Bar</span>
+                                <span class="label-desc">Display video progress and seeking</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="showProgress" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Show Volume Controls</span>
+                                <span class="label-desc">Display volume button and slider</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="showVolume" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Show Time Display</span>
+                                <span class="label-desc">Display current and total time</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="showTime" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Behavior Section -->
+            <section class="options-section" id="behavior-section">
+                <div class="section-header">
+                    <h2>Behavior</h2>
+                    <p>Configure how PiP behaves in different situations</p>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>Video Detection</h3>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Smart Video Detection</span>
+                                <span class="label-desc">Automatically find the best video on page</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="smartVideoDetection" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Prefer Largest Video</span>
+                                <span class="label-desc">Choose largest video when multiple found</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="preferLargestVideo" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Playback</h3>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Pause on Close</span>
+                                <span class="label-desc">Pause video when PiP window closes</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="pauseOnClose" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Resume on Reopen</span>
+                                <span class="label-desc">Resume playback when reopening PiP</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="resumeOnReopen" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Close on Video End</span>
+                                <span class="label-desc">Automatically close PiP when video ends</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="closeOnVideoEnd">
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Site-Specific Section -->
+            <section class="options-section" id="sites-section">
+                <div class="section-header">
+                    <h2>Site-Specific Settings</h2>
+                    <p>Configure enhanced features for supported websites</p>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>General</h3>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span class="label-text">Enable Site-Specific Features</span>
+                                <span class="label-desc">Use enhanced controls for supported sites</span>
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="sitesEnabled" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="site-configs" id="siteConfigs">
+                        <!-- Site configurations will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="options-footer">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>PipX v2.0.0 - Enhanced Picture-in-Picture</p>
+                    <p class="footer-note">Settings are automatically synced across your Chrome browsers</p>
+                </div>
+                <div class="footer-actions">
+                    <button class="btn text" id="exportBtn">Export Settings</button>
+                    <button class="btn text" id="importBtn">Import Settings</button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="importFile" accept=".json" style="display: none;">
+
+    <script src="../utils/config.js"></script>
+    <script src="options.js"></script>
+</body>
+</html> 

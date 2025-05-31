@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PipX - Enhanced Picture-in-Picture</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <!-- Header -->
+        <header class="popup-header">
+            <div class="logo-section">
+                <img src="../icons/icon48.png" alt="PipX" class="logo">
+                <div class="title-section">
+                    <h1>PipX</h1>
+                    <p class="subtitle">Enhanced Picture-in-Picture</p>
+                </div>
+            </div>
+            <button class="settings-btn" id="settingsBtn" title="Settings">
+                <img src="../assets/icons/cog.svg" alt="Settings" class="icon">
+            </button>
+        </header>
+
+        <!-- Status Section -->
+        <section class="status-section">
+            <div class="status-indicator" id="statusIndicator">
+                <div class="status-dot"></div>
+                <span class="status-text" id="statusText">Checking compatibility...</span>
+            </div>
+            <div class="site-info" id="siteInfo">
+                <span class="site-name" id="siteName">Generic Site</span>
+                <span class="video-count" id="videoCount">0 videos found</span>
+            </div>
+        </section>
+
+        <!-- Main Actions -->
+        <section class="actions-section">
+            <button class="primary-action" id="togglePipBtn" disabled>
+                <img src="../assets/icons/pip.svg" alt="PiP" class="icon">
+                <span class="action-text">Activate PiP</span>
+            </button>
+        </section>
+
+        <!-- Footer -->
+        <footer class="popup-footer">
+            <div class="footer-links">
+                <a href="https://github.com/gldkhoward/pipx-chrome-exentsion" target="_blank" class="footer-link" title="View on GitHub">
+                    <img src="../assets/icons/git.svg" alt="GitHub" class="icon">
+                    <span>GitHub</span>
+                </a>
+                <a href="https://buymeacoffee.com/ekulhowardt" target="_blank" class="footer-link" title="Buy me a coffee">
+                    <img src="../assets/icons/coffee.svg" alt="Coffee" class="icon">
+                    <span>Support</span>
+                </a>
+            </div>
+            <button class="footer-link settings-link" id="optionsLink">
+                More Settings
+            </button>
+        </footer>
+    </div>
+
+    <script src="../utils/config.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html> 
